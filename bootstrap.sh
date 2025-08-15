@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
 
 REPO_URL="https://github.com/diogocoutinho/canvas-php.git"
