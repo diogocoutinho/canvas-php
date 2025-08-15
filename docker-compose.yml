@@ -3,8 +3,7 @@ version: "3.9"
 services:
   app:
     build:
-      context: .
-      dockerfile: docker/php/Dockerfile
+      context: ./docker/php
     container_name: php-app
     volumes:
       - .:/var/www/html
@@ -66,8 +65,8 @@ services:
     image: axllent/mailpit:latest
     container_name: mailpit
     ports:
-      - "8025:8025"  # UI
-      - "1025:1025"  # SMTP
+      - "8025:8025" # UI
+      - "1025:1025" # SMTP
     networks:
       - app_net
 
