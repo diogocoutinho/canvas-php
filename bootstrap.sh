@@ -11,7 +11,7 @@ command -v docker-compose >/dev/null 2>&1 || { echo "❌ docker-compose não enc
 
 PROJECT_NAME=$(prompt "📦 Nome do projeto (pasta destino): ")
 FRAMEWORK=$(prompt "🧰 Framework [laravel|hyperf]: ")
-FRAMEWORK=${FRAMEWORK,,}
+FRAMEWORK=$(echo "$FRAMEWORK" | tr '[:upper:]' '[:lower:]')
 
 if [[ "$FRAMEWORK" != "laravel" && "$FRAMEWORK" != "hyperf" ]]; then
   echo "❌ Framework inválido."; exit 1;
