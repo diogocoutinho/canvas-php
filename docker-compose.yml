@@ -3,7 +3,8 @@ version: "3.9"
 services:
   app:
     build:
-      context: ./docker/php
+      context: .
+      dockerfile: docker/php/Dockerfile
     container_name: php-app
     volumes:
       - .:/var/www/html
