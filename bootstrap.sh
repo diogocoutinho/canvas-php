@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_URL="https://github.com/diogocoutinho/canvas-php.git"  # ⚠️ substitua após publicar
+REPO_URL="https://github.com/diogocoutinho/canvas-php.git"
 
 prompt() { read -r -p "$1" REPLY; echo "$REPLY"; }
 
