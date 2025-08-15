@@ -29,11 +29,11 @@ RUN echo "zend_extension=xdebug.so" >> /usr/local/etc/php/conf.d/docker-php-ext-
     && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Supervisor + scripts
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY start-app.sh /usr/local/bin/start-app.sh
-COPY setup-framework.sh /usr/local/bin/setup-framework.sh
-COPY inside-container-init.sh /usr/local/bin/inside-container-init.sh
-COPY minio-bucket.sh /usr/local/bin/minio-bucket.sh
+COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./start-app.sh /usr/local/bin/start-app.sh
+COPY ./setup-framework.sh /usr/local/bin/setup-framework.sh
+COPY ./inside-container-init.sh /usr/local/bin/inside-container-init.sh
+COPY ./minio-bucket.sh /usr/local/bin/minio-bucket.sh
 RUN chmod +x /usr/local/bin/*.sh
 
 WORKDIR /var/www/html
