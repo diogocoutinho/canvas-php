@@ -13,12 +13,12 @@ PROJECT_NAME=$(prompt "📦 Nome do projeto (pasta destino): ")
 FRAMEWORK=$(prompt "🧰 Framework [laravel|hyperf]: ")
 FRAMEWORK=$(echo "$FRAMEWORK" | tr '[:upper:]' '[:lower:]')
 
-if [[ "$FRAMEWORK" != "laravel" && "$FRAMEWORK" != "hyperf" ]]; then
-  echo "❌ Framework inválido."; exit 1;
+if [ "$FRAMEWORK" != "laravel" ] && [ "$FRAMEWORK" != "hyperf" ]; then
+  echo "❌ Framework inválido."; exit 1
 fi
 
-if [[ -d "$PROJECT_NAME" ]]; then
-  echo "❌ A pasta '$PROJECT_NAME' já existe."; exit 1;
+if [ -d "$PROJECT_NAME" ]; then
+  echo "❌ A pasta '$PROJECT_NAME' já existe."; exit 1
 fi
 
 echo "➡️ Clonando template..."
@@ -29,7 +29,7 @@ cd "$PROJECT_NAME"
 echo "$FRAMEWORK" > .framework
 
 # Copiar .env.example correspondente
-if [[ "$FRAMEWORK" == "laravel" ]]; then
+if [ "$FRAMEWORK" = "laravel" ]; then
   cp .env.example.laravel .env
 else
   cp .env.example.hyperf .env
@@ -39,13 +39,13 @@ fi
 echo "🐳 Subindo containers..."
 docker-compose up -d --build
 
-# Rodar init dentro do container (composer create-project, deps, migrations, etc.)
+# Rodar init dentro do container
 echo "⚙️ Inicializando app dentro do container..."
 docker-compose exec -T app bash /usr/local/bin/inside-container-init.sh "$FRAMEWORK"
 
 read -r -p "➡️ Rodar 'make init' para finalizar (Y/n)? " RUN_INIT
 RUN_INIT=${RUN_INIT:-Y}
-if [[ "$RUN_INIT" =~ ^[Yy]$ ]]; then
+if [ "$RUN_INIT" = "Y" ] || [ "$RUN_INIT" = "y" ]; then
   make init || true
 fi
 
