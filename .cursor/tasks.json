@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "PHPUnit",
+      "type": "shell",
+      "command": "./vendor/bin/phpunit",
+      "group": "test"
+    },
+    {
+      "label": "PHP-CS-Fixer",
+      "type": "shell",
+      "command": "./vendor/bin/php-cs-fixer fix --allow-risky=yes",
+      "group": "build"
+    }
+  ]
+}

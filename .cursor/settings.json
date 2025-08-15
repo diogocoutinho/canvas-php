@@ -1,0 +1,17 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+  "editor.tabSize": 4,
+  "files.exclude": {
+    "**/.git": true,
+    "**/node_modules": true,
+    "**/vendor": true
+  },
+  "intelephense.environment.phpVersion": "8.2",
+  "php.validate.executablePath": "/usr/local/bin/php",
+  "php.suggest.basic": false,
+  "search.exclude": {
+    "**/vendor": true,
+    "**/node_modules": true
+  }
+}
