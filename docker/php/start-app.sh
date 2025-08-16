@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_DIR=/var/www/html
+APP_DIR=/var/www/html/current
 cd "$APP_DIR"
 FW="$(cat .framework 2>/dev/null || echo laravel)"
 
