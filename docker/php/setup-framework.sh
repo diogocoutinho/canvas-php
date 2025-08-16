@@ -3,34 +3,26 @@ set -euo pipefail
 
 FW=${1:-laravel}
 APP_DIR=/var/www/html
+FW_DIR="$APP_DIR/$FW"
 
 echo "Listando arquivos de $APP_DIR:"
 ls -la "$APP_DIR"
 
 if [ "$FW" = "laravel" ]; then
-  if [ ! -f "$APP_DIR/artisan" ]; then
-    # Check if directory is empty
-    if [ -z "$(ls -A "$APP_DIR")" ]; then
-      echo "🚀 Criando projeto Laravel..."
-      composer create-project laravel/laravel "$APP_DIR"
-    else
-      echo "⚠️ Diretório não está vazio e não contém artisan. Pulando create-project."
-      # If composer.json exists, run composer install
-      if [ -f "$APP_DIR/composer.json" ]; then
-        cd "$APP_DIR"
-        composer install --no-interaction
-      fi
-    fi
+  if [ ! -d "$FW_DIR" ]; then
+    echo "🚀 Criando projeto Laravel em $FW_DIR..."
+    composer create-project laravel/laravel "$FW_DIR"
   else
-    echo "✅ Projeto Laravel já existe, pulando create-project"
-    # Instead of create-project, run composer install if composer.json exists
-    if [ -f "$APP_DIR/composer.json" ]; then
-      cd "$APP_DIR"
-      composer install --no-interaction
-    fi
+    echo "✅ Diretório $FW_DIR já existe."
   fi
 
-  cd "$APP_DIR"
+  if [ -f "$FW_DIR/composer.json" ]; then
+    cd "$FW_DIR"
+    composer install --no-interaction
+  else
+    cd "$FW_DIR"
+  fi
+
   # Octane + Swoole
   composer require laravel/octane:^2.6 --no-interaction
   php artisan octane:install --server=swoole --no-interaction || true
@@ -39,14 +31,20 @@ if [ "$FW" = "laravel" ]; then
   chmod -R 777 storage bootstrap/cache
 
 elif [ "$FW" = "hyperf" ]; then
-  if [ ! -f "$APP_DIR/composer.json" ] || [ ! -d "$APP_DIR/app" ]; then
-    echo "🚀 Criando projeto Hyperf..."
-    composer create-project hyperf/hyperf-skeleton "$APP_DIR" -n
+  if [ ! -d "$FW_DIR" ]; then
+    echo "🚀 Criando projeto Hyperf em $FW_DIR..."
+    composer create-project hyperf/hyperf-skeleton "$FW_DIR" -n
   else
-    echo "✅ Projeto Hyperf já existe, pulando create-project"
+    echo "✅ Diretório $FW_DIR já existe."
   fi
 
-  cd "$APP_DIR"
+  if [ -f "$FW_DIR/composer.json" ]; then
+    cd "$FW_DIR"
+    composer install --no-interaction
+  else
+    cd "$FW_DIR"
+  fi
+
   mkdir -p runtime
   chmod -R 777 runtime || true
 
@@ -54,3 +52,11 @@ else
   echo "❌ Framework não suportado: $FW"
   exit 1
 fi
+
+# Create/update symlink for Nginx: /var/www/html/current -> $FW_DIR
+SYMLINK_PATH="$APP_DIR/current"
+if [ -L "$SYMLINK_PATH" ] || [ -e "$SYMLINK_PATH" ]; then
+  rm -rf "$SYMLINK_PATH"
+fi
+ln -s "$FW_DIR" "$SYMLINK_PATH"
+echo "🔗 Symlinked $SYMLINK_PATH -> $FW_DIR (Nginx will serve from /var/www/html/current/public)"
