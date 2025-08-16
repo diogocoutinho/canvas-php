@@ -9,8 +9,18 @@ ls -la "$APP_DIR"
 
 if [ "$FW" = "laravel" ]; then
   if [ ! -f "$APP_DIR/artisan" ]; then
-    echo "🚀 Criando projeto Laravel..."
-    composer create-project laravel/laravel "$APP_DIR"
+    # Check if directory is empty
+    if [ -z "$(ls -A "$APP_DIR")" ]; then
+      echo "🚀 Criando projeto Laravel..."
+      composer create-project laravel/laravel "$APP_DIR"
+    else
+      echo "⚠️ Diretório não está vazio e não contém artisan. Pulando create-project."
+      # If composer.json exists, run composer install
+      if [ -f "$APP_DIR/composer.json" ]; then
+        cd "$APP_DIR"
+        composer install --no-interaction
+      fi
+    fi
   else
     echo "✅ Projeto Laravel já existe, pulando create-project"
     # Instead of create-project, run composer install if composer.json exists
