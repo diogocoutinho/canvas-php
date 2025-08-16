@@ -11,17 +11,18 @@ TARGET_DIR="/var/www/html"
 FW_DIR="$TARGET_DIR/$FW"
 
 if [ "$FW" = "laravel" ]; then
-  if [ -f "$TARGET_DIR/current/composer.json" ]; then
+  if [ -f "$FW_DIR/composer.json" ]; then
     echo "🚨composer.json found, running composer install..."
-    echo "Listando arquivos de $TARGET_DIR/current:"
-    ls -la "$TARGET_DIR/current"
+    echo "Listando arquivos de $FW_DIR:"
+    ls -la "$FW_DIR"
+    cd "$FW_DIR"
     composer install --no-interaction --prefer-dist --optimize-autoloader
   else
-    if [ "$(ls -A $TARGET_DIR/current)" ]; then
-      echo "Directory $TARGET_DIR/current is not empty but composer.json not found, skipping create-project."
+    if [ "$(ls -A $FW_DIR)" ]; then
+      echo "Directory $FW_DIR is not empty but composer.json not found, skipping create-project."
     else
-      echo "Creating new Laravel project in $TARGET_DIR/current..."
-      composer create-project --prefer-dist laravel/laravel "$TARGET_DIR/current"
+      echo "Creating new Laravel project in $FW_DIR..."
+      composer create-project --prefer-dist laravel/laravel "$FW_DIR"
     fi
   fi
 
@@ -33,11 +34,11 @@ if [ "$FW" = "laravel" ]; then
   fi
 
   # Set permissions
-  chown -R www-data:www-data "$TARGET_DIR/current"
-  chmod -R 755 "$TARGET_DIR/current"
+  chown -R www-data:www-data "$FW_DIR"
+  chmod -R 755 "$FW_DIR"
 
 elif [ "$FW" = "hyperf" ]; then
-  if [ ! -f "$TARGET_DIR/current/composer.json" ]; then
-    composer create-project hyperf/hyperf-skeleton "$TARGET_DIR/current"
+  if [ ! -f "$FW_DIR/composer.json" ]; then
+    composer create-project hyperf/hyperf-skeleton "$FW_DIR"
   fi
 fi
