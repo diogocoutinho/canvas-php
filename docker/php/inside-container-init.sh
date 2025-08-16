@@ -8,6 +8,10 @@ bash /usr/local/bin/setup-framework.sh "$FW"
 
 TARGET_DIR="/var/www/html"
 
+FW_DIR="$TARGET_DIR/$FW"
+
+cd $FW_DIR
+
 if [ "$FW" = "laravel" ]; then
   if [ -f "$TARGET_DIR/composer.json" ]; then
     echo "composer.json found, running composer install..."
