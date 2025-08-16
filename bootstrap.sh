@@ -9,6 +9,8 @@ command -v git >/dev/null 2>&1 || { echo "❌ git não encontrado. Instale o git
 command -v docker >/dev/null 2>&1 || { echo "❌ docker não encontrado."; exit 1; }
 command -v docker-compose >/dev/null 2>&1 || { echo "❌ docker-compose não encontrado."; exit 1; }
 
+APP_DIR="/var/www/html"
+
 PROJECT_NAME=$(prompt "📦 Nome do projeto (pasta destino): ")
 
 if [ -d "$PROJECT_NAME" ]; then
@@ -42,7 +44,7 @@ docker-compose up -d --build
 
 # Rodar init dentro do container
 echo "⚙️ Inicializando app dentro do container..."
-docker-compose exec -T app bash /usr/local/bin/inside-container-init.sh "$FRAMEWORK"
+docker-compose exec -T app bash /usr/local/bin/inside-container-init.sh "$APP_DIR/$FRAMEWORK"
 
 read -r -p "➡️ Rodar 'make init' para finalizar (Y/n)? " RUN_INIT
 RUN_INIT=${RUN_INIT:-Y}
