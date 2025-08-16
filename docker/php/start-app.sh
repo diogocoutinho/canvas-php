@@ -4,6 +4,7 @@ set -euo pipefail
 APP_DIR=/var/www/html/current
 cd "$APP_DIR"
 FW="$(cat .framework 2>/dev/null || echo laravel)"
+ls -la "$APP_DIR"
 
 if [ "$FW" = "laravel" ]; then
   if [ -f "$APP_DIR/artisan" ]; then
