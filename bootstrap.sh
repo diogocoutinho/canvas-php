@@ -44,7 +44,7 @@ docker-compose up -d --build
 
 # Rodar init dentro do container
 echo "⚙️ Inicializando app dentro do container..."
-docker-compose exec -T app bash /usr/local/bin/inside-container-init.sh "$FRAMEWORK"
+docker-compose exec -T app bash -c "cd /var/www/html/current && /usr/local/bin/inside-container-init.sh $FRAMEWORK"
 
 read -r -p "➡️ Rodar 'make init' para finalizar (Y/n)? " RUN_INIT
 RUN_INIT=${RUN_INIT:-Y}
