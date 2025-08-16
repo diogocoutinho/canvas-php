@@ -4,6 +4,9 @@ set -euo pipefail
 FW=${1:-laravel}
 TARGET_DIR="/var/www/html"
 
+# 1) Instala framework
+bash /usr/local/bin/setup-framework.sh "$FW"
+
 if [ "$FW" = "laravel" ]; then
   if [ -f "$TARGET_DIR/composer.json" ]; then
     echo "composer.json found, running composer install..."
