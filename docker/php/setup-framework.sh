@@ -2,7 +2,7 @@
 set -euo pipefail
 
 FW=${1:-laravel}
-APP_DIR=/var/www/html/current
+APP_DIR=/var/www/html
 FW_DIR="$APP_DIR/$FW"
 
 echo "Listando arquivos de $APP_DIR:"
