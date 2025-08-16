@@ -13,6 +13,11 @@ if [ "$FW" = "laravel" ]; then
     composer create-project laravel/laravel "$APP_DIR"
   else
     echo "✅ Projeto Laravel já existe, pulando create-project"
+    # Instead of create-project, run composer install if composer.json exists
+    if [ -f "$APP_DIR/composer.json" ]; then
+      cd "$APP_DIR"
+      composer install --no-interaction
+    fi
   fi
 
   cd "$APP_DIR"
