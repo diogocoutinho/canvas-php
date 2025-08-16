@@ -10,15 +10,16 @@ command -v docker >/dev/null 2>&1 || { echo "❌ docker não encontrado."; exit 
 command -v docker-compose >/dev/null 2>&1 || { echo "❌ docker-compose não encontrado."; exit 1; }
 
 PROJECT_NAME=$(prompt "📦 Nome do projeto (pasta destino): ")
+
+if [ -d "$PROJECT_NAME" ]; then
+  echo "❌ A pasta '$PROJECT_NAME' já existe."; exit 1
+fi
+
 FRAMEWORK=$(prompt "🧰 Framework [laravel|hyperf]: ")
 FRAMEWORK=$(echo "$FRAMEWORK" | tr '[:upper:]' '[:lower:]')
 
 if [ "$FRAMEWORK" != "laravel" ] && [ "$FRAMEWORK" != "hyperf" ]; then
   echo "❌ Framework inválido."; exit 1
-fi
-
-if [ -d "$PROJECT_NAME" ]; then
-  echo "❌ A pasta '$PROJECT_NAME' já existe."; exit 1
 fi
 
 echo "➡️ Clonando template..."
