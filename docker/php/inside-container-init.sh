@@ -6,7 +6,7 @@ FW=${1:-laravel}
 # 1) Instala framework
 bash /usr/local/bin/setup-framework.sh "$FW"
 
-TARGET_DIR="/var/www/html"
+TARGET_DIR="/var/www/html/current"
 
 if [ "$FW" = "laravel" ]; then
   if [ -f "$TARGET_DIR/composer.json" ]; then
