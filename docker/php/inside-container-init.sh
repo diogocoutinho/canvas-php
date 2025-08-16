@@ -13,6 +13,7 @@ FW_DIR="$TARGET_DIR/$FW"
 if [ "$FW" = "laravel" ]; then
   if [ -f "$FW_DIR/composer.json" ]; then
     echo "🚨composer.json found, running composer install..."
+    echo "Listando arquivos de $FW_DIR:"
     ls -la "$FW_DIR"
     composer install --no-interaction --prefer-dist --optimize-autoloader
   else
