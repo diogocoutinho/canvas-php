@@ -59,9 +59,9 @@ optimize:
 	$(EXEC_APP) php artisan view:cache || true
 
 minio-make-bucket:
-	docker run --rm --network=app_net minio/mc \
+	docker run --rm --network=poenatela_app_net minio/mc \
 		alias set localminio http://minio:9000 minio minio123 && \
-		docker run --rm --network=app_net minio/mc mb localminio/app-bucket --ignore-existing
+		docker run --rm --network=poenatela_app_net minio/mc mb localminio/app-bucket --ignore-existing
 
 shell:
 	$(EXEC_APP) bash $(cmd)
