@@ -16,6 +16,10 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo pdo_pgsql zip \
     && rm -rf /var/lib/apt/lists/*
 
+RUN docker-php-ext-install pcntl \
+    && pecl install redis xdebug swoole \
+    && docker-php-ext-enable redis xdebug swoole
+
 # Extensões PECL: redis, xdebug, swoole
 RUN pecl install redis xdebug swoole \
     && docker-php-ext-enable redis xdebug swoole

@@ -1,6 +1,8 @@
 EXEC_APP = docker-compose exec app
 DC = docker-compose
 
+cmd := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+
 init: up install migrate minio-make-bucket info
 
 up:
@@ -60,3 +62,6 @@ minio-make-bucket:
 	docker run --rm --network=app_net minio/mc \
 		alias set localminio http://minio:9000 minio minio123 && \
 		docker run --rm --network=app_net minio/mc mb localminio/app-bucket --ignore-existing
+
+shell:
+	$(EXEC_APP) bash $(cmd)
