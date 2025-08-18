@@ -7,7 +7,7 @@ cd "$APP_DIR/$FW"
 ls -la "$APP_DIR"
 
 if [ "$FW" = "laravel" ]; then
-  if [ -f "$APP_DIR/artisan" ]; then
+  if [ -f "$APP_DIR/$FW/artisan" ]; then
     cd "$APP_DIR/$FW"
     echo "🔶 Iniciando Laravel Octane (Swoole) em 0.0.0.0:9501 no diretório $APP_DIR/$FW"
     exec php artisan octane:start --server=swoole --host=0.0.0.0 --port=9501 --watch --workers=1
@@ -16,7 +16,7 @@ if [ "$FW" = "laravel" ]; then
     sleep 2
   fi
 elif [ "$FW" = "hyperf" ]; then
-  if [ -f "$APP_DIR/bin/hyperf.php" ]; then
+  if [ -f "$APP_DIR/$FW/bin/hyperf.php" ]; then
     echo "🟣 Iniciando Hyperf (Swoole) em 0.0.0.0:9501 no diretório $APP_DIR"
     export SCAN_CACHEABLE=false
     exec php bin/hyperf.php start
