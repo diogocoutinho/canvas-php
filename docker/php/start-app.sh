@@ -10,7 +10,7 @@ if [ "$FW" = "laravel" ]; then
   if [ -f "$APP_DIR/$FW/artisan" ]; then
     cd "$APP_DIR/$FW"
     echo "🔶 Iniciando Laravel Octane (Swoole) em 0.0.0.0:9501 no diretório $APP_DIR/$FW"
-    exec php artisan octane:start --server=swoole --host=0.0.0.0 --port=9501 --watch --workers=1
+    exec php artisan octane:start --server=swoole --host=0.0.0.0 --port=9501 --workers=1
   else
     echo "Arquivo artisan não encontrado em $APP_DIR. Não foi possível iniciar Laravel Octane."
     sleep 2
