@@ -611,16 +611,16 @@ EOF
 
 # Criar arquivo .env
 create_env_file() {
-    cat > .env << 'EOF'
+    cat > .env << EOF
 # Configurações do projeto
-PROJECT_NAME=app
-FRAMEWORK=laravel
+PROJECT_NAME=${PROJECT_NAME}
+FRAMEWORK=${FRAMEWORK}
 
 # Configurações do banco de dados
 DB_CONNECTION=pgsql
 DB_HOST=postgres
 DB_PORT=5432
-DB_DATABASE=appdb
+DB_DATABASE=${PROJECT_NAME}-db
 DB_USERNAME=user
 DB_PASSWORD=secret
 
@@ -644,7 +644,7 @@ MAIL_USERNAME=null
 MAIL_PASSWORD=null
 MAIL_ENCRYPTION=null
 MAIL_FROM_ADDRESS="hello@example.com"
-MAIL_FROM_NAME="${APP_NAME}"
+MAIL_FROM_NAME="${PROJECT_NAME}"
 EOF
 }
 
@@ -837,7 +837,11 @@ initialize_project() {
         log_error "Framework não suportado: $FRAMEWORK"
         exit 1
     fi
-    
+
+    # Copiar o arquivo .env para dentro do diretório do framework
+    log_step "Copiando .env para o diretório $FRAMEWORK"
+    cp .env "$FRAMEWORK/.env"
+
     # Criar link simbólico para o framework
     log_step "Configurando Nginx..."
     ln -sf "$FRAMEWORK" current
