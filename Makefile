@@ -1,5 +1,6 @@
-EXEC_APP = docker-compose exec app
-DC = docker-compose
+ROOT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+DC = docker-compose -f $(ROOT_DIR)/docker-compose.yml
+EXEC_APP = $(DC) exec app
 
 cmd := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
