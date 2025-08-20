@@ -2,7 +2,7 @@
 set -euo pipefail
 
 APP_DIR=/var/www/html
-FW="$(cat .framework 2>/dev/null || echo laravel)"
+FW="${FRAMEWORK:-laravel}"
 cd "$APP_DIR/$FW"
 ls -la "$APP_DIR"
 

@@ -1,0 +1,54 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache/
+*.cache
+
+# Dependências
+vendor/
+node_modules/
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-*
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos de ambiente
+.env*
+!.env.example
+
+# Documentação
+README.md
+LICENSE
+*.md
+
+# Testes
+tests/
+phpunit.xml
+.coverage/
+
+# Build
+build/
+dist/

@@ -1,0 +1,7 @@
+# Ignorar apenas arquivos desnecessários para o build
+.git
+.gitignore
+README.md
+*.md
+.DS_Store
+Thumbs.db

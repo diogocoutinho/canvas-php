@@ -50,6 +50,7 @@ elif [ "$FW" = "hyperf" ]; then
 
 else
   echo "❌ Framework não suportado: $FW"
+  echo "Frameworks suportados: laravel, hyperf"
   exit 1
 fi
 
