@@ -47,7 +47,7 @@ git clone --depth=1 "$REPO_URL" "$TEMP_DIR"
 # Copiar arquivos necessários
 log_info "Instalando Canvas PHP..."
 cp "$TEMP_DIR/bootstrap.sh" "$INSTALL_DIR/$SCRIPT_NAME"
-chmod +x "$INSTALL_DIR/$INSTALL_DIR/$SCRIPT_NAME"
+chmod +x "$INSTALL_DIR/$SCRIPT_NAME"
 
 # Limpar arquivos temporários
 rm -rf "$TEMP_DIR"
