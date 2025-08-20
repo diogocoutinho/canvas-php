@@ -10,7 +10,8 @@
 - ⚡ **Performance**: Laravel Octane + Swoole para máxima velocidade
 - 🗄️ **Stack completo**: PostgreSQL, Redis, MinIO, Mailpit
 - 🛠️ **DevOps ready**: Makefile com comandos úteis
-- 🎨 **Interface colorida**: Output visual e informativo
+- 🧹 **Limpeza automática**: Remove projetos em caso de erro na criação
+- 🎨 **Interface intuitiva**: Seleção interativa com setas do teclado e output colorido
 
 ## 🚀 Instalação Rápida
 
@@ -36,6 +37,7 @@ cd canvas-php
 - Git
 - Docker
 - Docker Compose
+- fzf (instalado automaticamente se não estiver presente)
 
 ## 🎯 Como Usar
 
@@ -50,7 +52,7 @@ canvas-php
 O script irá solicitar:
 
 - Nome do projeto
-- Framework (Laravel ou Hyperf)
+- Framework (Laravel ou Hyperf) - seleção interativa com setas do teclado
 
 ### 3. Aguardar a criação
 
@@ -58,27 +60,35 @@ O sistema irá:
 
 - Criar a estrutura do projeto
 - Configurar containers Docker
-- Instalar o framework escolhido
-- Configurar ambiente de desenvolvimento
+- Instalar o framework escolhido automaticamente
+- Configurar Laravel Octane + Swoole (para Laravel)
+- Configurar banco de dados PostgreSQL
+- Configurar ambiente de desenvolvimento completo
 
 ## 🏗️ Estrutura do Projeto Criado
 
 ```
 meu-projeto/
-├── docker/                 # Configurações Docker
-│   ├── nginx/             # Configuração Nginx
-│   └── php/               # Dockerfile e scripts PHP
-├── docker-compose.yml     # Orquestração de containers
-├── Makefile               # Comandos úteis
-├── .env                   # Variáveis de ambiente
-├── .gitignore             # Arquivos ignorados pelo Git
-└── README.md              # Documentação do projeto
+├── laravel/               # Framework instalado (Laravel ou Hyperf)
+│   ├── app/              # Aplicação do framework
+│   ├── public/           # Arquivos públicos
+│   └── ...               # Demais arquivos do framework
+├── docker/               # Configurações Docker
+│   ├── nginx/           # Configuração Nginx (proxy para Octane)
+│   └── php/             # Dockerfile e scripts PHP
+├── docker-compose.yml   # Orquestração de containers
+├── Makefile            # Comandos úteis
+├── .env                # Variáveis de ambiente
+├── .gitignore          # Arquivos ignorados pelo Git
+├── .framework          # Framework selecionado
+├── current -> laravel  # Link simbólico para o framework
+└── README.md           # Documentação do projeto
 ```
 
 ## 🐳 Stack Tecnológica
 
-- **PHP 8.2** + FPM + Swoole
-- **Nginx** como proxy reverso
+- **PHP 8.2** + Swoole + Laravel Octane
+- **Nginx** como proxy reverso (para Laravel Octane)
 - **PostgreSQL 15** como banco principal
 - **Redis 7** para cache e sessões
 - **MinIO** para armazenamento S3-compatible
@@ -112,11 +122,11 @@ docker-compose logs -f   # Ver logs em tempo real
 
 ## 🌐 URLs do Ambiente
 
-- **Aplicação**: http://localhost:8080
-- **Mailpit**: http://localhost:8025
-- **MinIO Console**: http://localhost:9001
-- **PostgreSQL**: localhost:5432
-- **Redis**: localhost:6379
+- **Aplicação**: http://localhost:8080 (Laravel via Octane/Swoole)
+- **Mailpit**: http://localhost:8025 (Interface de email)
+- **MinIO Console**: http://localhost:9001 (Interface de armazenamento)
+- **PostgreSQL**: localhost:5432 (Banco de dados)
+- **Redis**: localhost:6379 (Cache/Sessões)
 
 ### Credenciais
 
@@ -136,9 +146,9 @@ O ambiente PHP vem configurado com:
 
 ### Nginx
 
-- Configuração otimizada para PHP
-- Suporte a Laravel e Hyperf
-- Rewrite rules configuradas
+- Configuração otimizada como proxy reverso
+- Suporte a Laravel Octane e Hyperf
+- Proxy para Swoole na porta 9501
 - Logs estruturados
 
 ## 🚀 Frameworks Suportados
