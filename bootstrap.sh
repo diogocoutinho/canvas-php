@@ -285,7 +285,7 @@ services:
     environment:
       - DB_HOST=postgres
       - DB_PORT=5432
-      - DB_DATABASE=appdb
+      - DB_DATABASE=${PROJECT_NAME}_postgres
       - DB_USERNAME=user
       - DB_PASSWORD=secret
       - REDIS_HOST=redis
@@ -313,7 +313,7 @@ services:
     container_name: ${PROJECT_NAME}_postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: appdb
+      POSTGRES_DB: ${PROJECT_NAME}_postgres
       POSTGRES_USER: user
       POSTGRES_PASSWORD: secret
     volumes:
@@ -620,7 +620,7 @@ FRAMEWORK=${FRAMEWORK}
 DB_CONNECTION=pgsql
 DB_HOST=postgres
 DB_PORT=5432
-DB_DATABASE=${PROJECT_NAME}-db
+DB_DATABASE=${PROJECT_NAME}_postgres
 DB_USERNAME=user
 DB_PASSWORD=secret
 
@@ -838,7 +838,11 @@ initialize_project() {
         exit 1
     fi
 
-    # Copiar o arquivo .env para dentro do diretório do framework
+    # Remover .env e .env.example originais do framework, se existirem
+    log_step "Removendo .env padrão do framework em $FRAMEWORK"
+    rm -f "$FRAMEWORK/.env" "$FRAMEWORK/.env.example"
+    
+    # Copiar o arquivo .env gerado para o diretório do framework
     log_step "Copiando .env para o diretório $FRAMEWORK"
     cp .env "$FRAMEWORK/.env"
 
