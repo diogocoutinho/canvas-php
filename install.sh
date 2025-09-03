@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-# Script de instalação do Canvas PHP
-# Este script baixa e instala o Canvas PHP no sistema
+# =============================================================================
+# 🚀 Canvas PHP - Instalador
+# =============================================================================
 
 set -euo pipefail
 
@@ -10,7 +11,9 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+NC='\033[0m'
 
 # Função para output colorido
 log_info() { echo -e "${BLUE}ℹ️  $1${NC}"; }
@@ -18,10 +21,11 @@ log_success() { echo -e "${GREEN}✅ $1${NC}"; }
 log_warning() { echo -e "${YELLOW}⚠️  $1${NC}"; }
 log_error() { echo -e "${RED}❌ $1${NC}"; }
 
-# URL do repositório
+# Configurações
 REPO_URL="https://github.com/diogocoutinho/canvas-php.git"
 INSTALL_DIR="$HOME/.local/bin"
 SCRIPT_NAME="canvas-php"
+CANVAS_DIR="$HOME/.local/share/canvas-php"
 
 echo -e "${BLUE}🚀 Canvas PHP - Instalador${NC}"
 echo "================================"
@@ -35,9 +39,10 @@ command -v docker-compose >/dev/null 2>&1 || { log_error "docker-compose não en
 
 log_success "Todas as dependências estão instaladas"
 
-# Criar diretório de instalação
-log_info "Criando diretório de instalação..."
+# Criar diretórios de instalação
+log_info "Criando diretórios de instalação..."
 mkdir -p "$INSTALL_DIR"
+mkdir -p "$CANVAS_DIR"
 
 # Baixar o projeto
 log_info "Baixando Canvas PHP..."
@@ -46,7 +51,14 @@ git clone --depth=1 "$REPO_URL" "$TEMP_DIR"
 
 # Copiar arquivos necessários
 log_info "Instalando Canvas PHP..."
-cp "$TEMP_DIR/bootstrap.sh" "$INSTALL_DIR/$SCRIPT_NAME"
+cp -R "$TEMP_DIR/"* "$CANVAS_DIR/"
+
+# Criar script executável
+cat > "$INSTALL_DIR/$SCRIPT_NAME" << 'EOF'
+#!/usr/bin/env bash
+exec "$HOME/.local/share/canvas-php/bootstrap.sh" "$@"
+EOF
+
 chmod +x "$INSTALL_DIR/$SCRIPT_NAME"
 
 # Limpar arquivos temporários
@@ -55,14 +67,14 @@ rm -rf "$TEMP_DIR"
 # Verificar se o PATH inclui o diretório de instalação
 if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
     log_warning "O diretório $INSTALL_DIR não está no PATH"
-    log_info "Adicione a seguinte linha ao seu ~/.bashrc, ~/.zshrc ou ~/.profile:"
+    log_info "Adicione a seguinte linha ao seu ~/.zshrc, ~/.bashrc ou ~/.profile:"
     echo -e "${YELLOW}export PATH=\"\$PATH:$INSTALL_DIR\"${NC}"
     
     # Perguntar se quer adicionar automaticamente
     read -r -p "Deseja adicionar automaticamente ao PATH? (Y/n): " ADD_TO_PATH
     ADD_TO_PATH=${ADD_TO_PATH:-Y}
     
-    if [ "$ADD_TO_PATH" = "Y" ] || [ "$ADD_TO_PATH" = "y" ]; then
+    if [[ "$ADD_TO_PATH" =~ ^[Yy]$ ]]; then
         if [ -f "$HOME/.zshrc" ]; then
             echo "export PATH=\"\$PATH:$INSTALL_DIR\"" >> "$HOME/.zshrc"
             log_success "Adicionado ao ~/.zshrc"
@@ -92,4 +104,4 @@ echo ""
 echo -e "${BLUE}📚 Documentação:${NC}"
 echo "Visite: https://github.com/diogocoutinho/canvas-php"
 echo ""
-echo -e "${GREEN}🚀 Boa codificação!${NC}"
+echo -e "${GREEN}🚀 Boa codificação!${NC}" 

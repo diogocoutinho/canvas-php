@@ -20,6 +20,7 @@ services:
       AWS_DEFAULT_REGION: us-east-1
       AWS_BUCKET: app-bucket
       AWS_ENDPOINT: http://minio:9000
+      REDIS_HOST: redis
     networks:
       - app_net
 

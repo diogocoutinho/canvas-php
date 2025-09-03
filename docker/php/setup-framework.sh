@@ -3,61 +3,50 @@ set -euo pipefail
 
 FW=${1:-laravel}
 APP_DIR=/var/www/html
-FW_DIR="$APP_DIR/$FW"
 
-echo "Listando arquivos de $APP_DIR:"
-ls -la "$APP_DIR"
+echo "🚀 Instalando framework $FW em $APP_DIR..."
 
 if [ "$FW" = "laravel" ]; then
-  if [ ! -d "$FW_DIR" ]; then
-    echo "🚀 Criando projeto Laravel em $FW_DIR..."
-    composer create-project laravel/laravel "$FW_DIR"
-  else
-    echo "✅ Diretório $FW_DIR já existe."
-  fi
-
-  if [ -f "$FW_DIR/composer.json" ]; then
-    cd "$FW_DIR"
-    composer install --no-interaction
-  else
-    cd "$FW_DIR"
-  fi
-
-  # Octane + Swoole
-  composer require laravel/octane:^2.6 --no-interaction
-  php artisan octane:install --server=swoole --no-interaction || true
-  # Permissões
-  mkdir -p storage bootstrap/cache
-  chmod -R 777 storage bootstrap/cache
+    # Instalar Laravel diretamente na raiz
+    if [ ! -f "$APP_DIR/composer.json" ]; then
+        echo "🚀 Criando projeto Laravel em $APP_DIR..."
+        composer create-project --prefer-dist laravel/laravel "$APP_DIR" --no-interaction
+    else
+        echo "✅ composer.json já existe em $APP_DIR"
+    fi
+    
+    cd "$APP_DIR"
+    
+    # Instalar Laravel Octane + Swoole
+    if [ -f composer.json ]; then
+        composer require laravel/octane:^2.6 --no-interaction
+        php artisan octane:install --server=swoole --no-interaction || true
+        
+        # Configurar permissões
+        mkdir -p storage bootstrap/cache
+        chmod -R 777 storage bootstrap/cache
+    fi
 
 elif [ "$FW" = "hyperf" ]; then
-  if [ ! -d "$FW_DIR" ]; then
-    echo "🚀 Criando projeto Hyperf em $FW_DIR..."
-    composer create-project hyperf/hyperf-skeleton "$FW_DIR" -n
-  else
-    echo "✅ Diretório $FW_DIR já existe."
-  fi
-
-  if [ -f "$FW_DIR/composer.json" ]; then
-    cd "$FW_DIR"
-    composer install --no-interaction
-  else
-    cd "$FW_DIR"
-  fi
-
-  mkdir -p runtime
-  chmod -R 777 runtime || true
+    # Instalar Hyperf diretamente na raiz
+    if [ ! -f "$APP_DIR/composer.json" ]; then
+        echo "🚀 Criando projeto Hyperf em $APP_DIR..."
+        composer create-project hyperf/hyperf-skeleton "$APP_DIR" --no-interaction
+    else
+        echo "✅ composer.json já existe em $APP_DIR"
+    fi
+    
+    cd "$APP_DIR"
+    
+    if [ -f composer.json ]; then
+        # Configurar Hyperf
+        mkdir -p runtime
+        chmod -R 777 runtime || true
+    fi
 
 else
-  echo "❌ Framework não suportado: $FW"
-  echo "Frameworks suportados: laravel, hyperf"
-  exit 1
+    echo "❌ Framework não suportado: $FW"
+    exit 1
 fi
 
-# Create/update symlink for Nginx: /var/www/html/current -> $FW_DIR
-SYMLINK_PATH="$APP_DIR/current"
-if [ -L "$SYMLINK_PATH" ] || [ -e "$SYMLINK_PATH" ]; then
-  rm -rf "$SYMLINK_PATH"
-fi
-ln -s "$FW_DIR" "$SYMLINK_PATH"
-echo "🔗 Symlinked $SYMLINK_PATH -> $FW_DIR (Nginx will serve from /var/www/html/current/public)"
+echo "✅ Framework $FW instalado com sucesso em $APP_DIR"

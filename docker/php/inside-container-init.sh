@@ -3,9 +3,9 @@ set -euo pipefail
 
 FW=${1:-laravel}
 
-echo "Framework selecionado: $FW"
+echo "🚀 Canvas PHP - Inicializando framework $FW..."
 
-# 1) Instala framework
+# Instalar framework
 bash /usr/local/bin/setup-framework.sh "$FW"
 
 echo "✅ Framework $FW instalado com sucesso!"
