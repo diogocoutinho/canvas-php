@@ -37,7 +37,6 @@ cd canvas-php
 - Git
 - Docker
 - Docker Compose
-- fzf (instalado automaticamente se não estiver presente)
 
 ## 🎯 Como Usar
 
@@ -68,12 +67,11 @@ O sistema irá:
 ## 🏗️ Estrutura do Projeto Criado
 
 ```
-meu-projeto/
-├── laravel/               # Framework instalado (Laravel ou Hyperf)
-│   ├── app/              # Aplicação do framework
-│   ├── public/           # Arquivos públicos
-│   └── ...               # Demais arquivos do framework
-├── docker/               # Configurações Docker
+meu-projeto/  # Framework instalado (Laravel ou Hyperf)
+├── app/              # Aplicação do framework
+├── public/           # Arquivos públicos
+├── ...               # Demais arquivos do framework
+├── .docker/               # Configurações Docker
 │   ├── nginx/           # Configuração Nginx (proxy para Octane)
 │   └── php/             # Dockerfile e scripts PHP
 ├── docker-compose.yml   # Orquestração de containers
@@ -81,16 +79,15 @@ meu-projeto/
 ├── .env                # Variáveis de ambiente
 ├── .gitignore          # Arquivos ignorados pelo Git
 ├── .framework          # Framework selecionado
-├── current -> laravel  # Link simbólico para o framework
 └── README.md           # Documentação do projeto
 ```
 
 ## 🐳 Stack Tecnológica
 
-- **PHP 8.2** + Swoole + Laravel Octane
+- **PHP 8.4** + Swoole + Laravel Octane
 - **Nginx** como proxy reverso (para Laravel Octane)
-- **PostgreSQL 15** como banco principal
-- **Redis 7** para cache e sessões
+- **PostgreSQL** como banco principal
+- **Redis** para cache e sessões
 - **MinIO** para armazenamento S3-compatible
 - **Mailpit** para testes de email
 - **Supervisor** para gerenciamento de processos
