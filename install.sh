@@ -51,7 +51,8 @@ git clone --depth=1 "$REPO_URL" "$TEMP_DIR"
 
 # Copiar arquivos necessários
 log_info "Instalando Canvas PHP..."
-cp -R "$TEMP_DIR/"* "$CANVAS_DIR/"
+# Use cp -a with trailing dot to include hidden files (dotfiles) and preserve attributes
+cp -a "$TEMP_DIR/." "$CANVAS_DIR/"
 
 # Criar script executável
 cat > "$INSTALL_DIR/$SCRIPT_NAME" << 'EOF'
@@ -104,4 +105,4 @@ echo ""
 echo -e "${BLUE}📚 Documentação:${NC}"
 echo "Visite: https://github.com/diogocoutinho/canvas-php"
 echo ""
-echo -e "${GREEN}🚀 Boa codificação!${NC}" 
+echo -e "${GREEN}🚀 Boa codificação!${NC}"

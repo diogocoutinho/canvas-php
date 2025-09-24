@@ -6,6 +6,41 @@ RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
 BLUE='\033[0;34m'; CYAN='\033[0;36m'; NC='\033[0m'
 
 PROJECT_NAME=""; FRAMEWORK=""; SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Ensure required local template assets (like .docker/) exist. If not, attempt to fetch them from upstream.
+ensure_local_assets() {
+    local need_asset="$SCRIPT_DIR/.docker/php/Dockerfile"
+    if [ -f "$need_asset" ]; then
+        return 0
+    fi
+
+    log_warning "Templates .docker não encontrados em $SCRIPT_DIR. Tentando baixar assets do repositório..."
+    if ! command -v git >/dev/null 2>&1; then
+        log_error "git não disponível — não é possível baixar templates .docker. Por favor, reinstale usando o instalador (curl | bash) ou rode 'git clone' manualmente."
+        return 1
+    fi
+
+    local tmpdir
+    tmpdir=$(mktemp -d) || { log_error "Não foi possível criar diretório temporário"; return 1; }
+    # Try to clone only the .docker path via sparse checkout when supported; fallback to full shallow clone
+    if git clone --depth=1 --filter=blob:none https://github.com/diogocoutinho/canvas-php.git "$tmpdir" >/dev/null 2>&1; then
+        if [ -d "$tmpdir/.docker" ]; then
+            cp -a "$tmpdir/.docker" "$SCRIPT_DIR/" || { log_warning "Falha ao copiar .docker para $SCRIPT_DIR"; rm -rf "$tmpdir"; return 1; }
+            log_success "Assets .docker baixados para $SCRIPT_DIR/.docker"
+            rm -rf "$tmpdir"
+            return 0
+        else
+            log_warning "Repositório baixado mas .docker não encontrado no upstream"
+            rm -rf "$tmpdir"
+            return 1
+        fi
+    else
+        log_warning "Falha ao clonar o repositório remoto para obter .docker"
+        rm -rf "$tmpdir"
+        return 1
+    fi
+}
+
 PROGRESS_TOTAL=55; PROGRESS_CURRENT=0
 
 log_info() { echo -e "${BLUE}ℹ️  $1${NC}"; }
