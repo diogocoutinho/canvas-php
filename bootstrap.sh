@@ -396,7 +396,7 @@ create_framework() {
     mkdir -p "$TMP_FRAMEWORK"
 
     log_step "Criando framework $FRAMEWORK..."
-    if [ "$FRAMEWORK" = "Laravel" ]; then
+    if [ "$FRAMEWORK" = "laravel" ]; then
         docker run --rm -v "$(pwd)/$TMP_FRAMEWORK":/var/www/html -w /var/www/html composer create-project laravel/laravel . --no-interaction
 
         docker run --rm -v "$(pwd)/$TMP_FRAMEWORK":/var/www/html -w /var/www/html composer require laravel/octane --no-interaction
@@ -485,7 +485,7 @@ update_project_env() {
 }
 
 setup_laravel() {
-    if [ "$FRAMEWORK" = "Laravel" ]; then
+    if [ "$FRAMEWORK" = "laravel" ]; then
         pushd "$PROJECT_DIR" >/dev/null || { log_error "Não foi possível entrar em $PROJECT_DIR"; return 1; }
 
         log_step "Configurando Laravel Octane..."
