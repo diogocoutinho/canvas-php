@@ -185,6 +185,79 @@ volumes:
   minio_data:
 EOF
 
+    # Create a helpful Makefile with common targets for working with the containers and the framework
+    cat > "$PROJECT_DIR/Makefile" << 'MAKEFILE'
+# Auto-generated Makefile by canvas-php bootstrap
+# Usage examples:
+#  make up
+#  make artisan ARGS="migrate --seed"
+#  make composer ARGS="install"
+
+PROJECT_NAME := __PROJECT_NAME__
+COMPOSE := docker-compose
+APP_SERVICE := app
+
+.PHONY: up build down restart logs bash sh shell artisan composer migrate seed test tinker
+
+up:
+	$(COMPOSE) up -d
+
+build:
+	$(COMPOSE) build --no-cache
+
+down:
+	$(COMPOSE) down --remove-orphans --volumes
+
+restart:
+	$(COMPOSE) restart
+
+logs:
+	$(COMPOSE) logs -f
+
+# Open an interactive shell in the app container (tries bash then sh)
+bash:
+	$(COMPOSE) exec -T $(APP_SERVICE) bash || $(COMPOSE) exec -T $(APP_SERVICE) sh
+
+sh:
+	$(COMPOSE) exec -T $(APP_SERVICE) sh
+
+# Run artisan commands inside the app container. Example: make artisan ARGS="migrate --seed"
+artisan:
+	$(COMPOSE) exec -T $(APP_SERVICE) php artisan $(ARGS)
+
+# Run composer inside the app container. Example: make composer ARGS="install"
+composer:
+	$(COMPOSE) exec -T $(APP_SERVICE) composer $(ARGS)
+
+# Run migrations
+migrate:
+	$(COMPOSE) exec -T $(APP_SERVICE) php artisan migrate $(ARGS)
+
+# Run seeders
+seed:
+	$(COMPOSE) exec -T $(APP_SERVICE) php artisan db:seed $(ARGS)
+
+# Run test suite (phpunit)
+test:
+	$(COMPOSE) exec -T $(APP_SERVICE) vendor/bin/phpunit $(ARGS)
+
+# Tinker
+tinker:
+	$(COMPOSE) exec -T $(APP_SERVICE) php artisan tinker
+
+# Clear caches
+clear-cache:
+  $(COMPOSE) exec -T $(APP_SERVICE) php artisan cache:clear
+  $(COMPOSE) exec -T $(APP_SERVICE) php artisan config:clear
+  $(COMPOSE) exec -T $(APP_SERVICE) php artisan route:clear
+  $(COMPOSE) exec -T $(APP_SERVICE) php artisan view:clear
+
+MAKEFILE
+
+    # Inject the real project name into the Makefile using sed (portable fallback creates .bak then removed)
+    sed -i.bak "s|__PROJECT_NAME__|${PROJECT_NAME}|g" "$PROJECT_DIR/Makefile" 2>/dev/null || true
+    rm -f "$PROJECT_DIR/Makefile.bak" 2>/dev/null || true
+
     increment_progress
     log_success "Arquivos essenciais criados"
 }
@@ -261,7 +334,7 @@ initialize_containers() {
         exit 1
     fi
 
-    # Give extra time for services to fully initialize
+    # Give extra time to services to fully initialize
     sleep 5
     increment_progress
     popd >/dev/null
